@@ -1,0 +1,19 @@
+{
+  "name": "graph_mate",
+  "version": "1.0.0",
+  "description": "A desktop app for graph visualization",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HitRam/GraphMate.git"
+  },
+  "author": "Hitesh Ramchandani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HitRam/GraphMate/issues"
+  },
+  "homepage": "https://github.com/HitRam/GraphMate#readme"
+}
