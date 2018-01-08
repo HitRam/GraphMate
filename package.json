@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/HitRam/GraphMate/issues"
   },
-  "homepage": "https://github.com/HitRam/GraphMate#readme"
+  "homepage": "https://github.com/HitRam/GraphMate#readme",
+  "dependencies": {
+    "hashmap": "^2.3.0"
+  }
 }

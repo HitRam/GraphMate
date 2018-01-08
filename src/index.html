@@ -4,10 +4,32 @@
 	<title>GraphMate</title>
 	<link rel="stylesheet" href="../assets/vendor/css/photon.css">
 	<link rel="stylesheet" href="../assets/css/index.css">
-	<script src="index.js"></script>
+	<script src="https://cdn.rawgit.com/konvajs/konva/1.7.6/konva.min.js"></script>
 </head>
 <body>
 	<div class="window">
+		<header class="toolbar toolbar-header">
+			<h1 class="title">GraphMate</h1>
+			<div class="toolbar-actions">
+				<div class="btn-group">
+					<button class="btn btn-default active" id="normal_selection">
+						<span class="icon icon-direction"></span>
+					</button>
+					<button class="btn btn-default" id="add_node">
+						<span class="icon icon-pencil"></span>
+					</button>
+					<button class="btn btn-default" id="add_edge">
+						<span class="icon icon-feather"></span>
+					</button>
+					<button class="btn btn-default">
+						<span class="icon icon-popup"></span>
+					</button>
+					<button class="btn btn-default">
+						<span class="icon icon-shuffle"></span>
+					</button>
+				</div>
+			</div>
+		</header>
 		<div class="tab-group">
 			<div class="tab-item active">
 				<span class="icon icon-cancel icon-close-tab"></span>
@@ -27,5 +49,6 @@
 			<h1 class="title">Infobar</h1>
   		</footer>
 	</div>
+	<script src="index.js"></script>
 </body>
 </html>

@@ -6,12 +6,12 @@ const url = require('url')
 let win
 
 function createWindow() {
-  win = new BrowserWindow({ width: 800, height: 600 })
+  win = new BrowserWindow({width: 800, height: 600, frame: false})
 
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'src/index.html'),
-    protocol: 'file:',
-    slashes: true
+	pathname: path.join(__dirname, 'src/index.html'),
+	protocol: 'file:',
+	slashes: true
   }))
 
   //open the devtools
@@ -19,88 +19,88 @@ function createWindow() {
   win.webContents.openDevTools()
 
   win.on('closed', () => {
-    win = null
+	win = null
   })
 }
 
 const menu_template = [{
-    label: 'File',
-    submenu: [{
-        label: 'New'
-      },
-      {
-        label: 'Open'
-      },
-      {
-        label: 'Save'
-      },
-      {
-        label: 'Save As'
-      },
-      {
-        role: 'close'
-      },
-      {
-        role: 'quit'
-      }
-    ]
+	label: 'File',
+	submenu: [{
+		label: 'New'
+	  },
+	  {
+		label: 'Open'
+	  },
+	  {
+		label: 'Save'
+	  },
+	  {
+		label: 'Save As'
+	  },
+	  {
+		role: 'close'
+	  },
+	  {
+		role: 'quit'
+	  }
+	]
   },
   {
-    label: 'Edit',
-    submenu: [{
-        role: 'undo'
-      },
-      {
-        role: 'redo'
-      },
-      {
-        role: 'cut'
-      },
-      {
-        role: 'copy'
-      },
-      {
-        role: 'paste'
-      }
-    ]
-  },
-
-  {
-    label: 'View',
-    submenu: [{
-        role: 'resetzoom'
-      },
-      {
-        role: 'zoomin'
-      },
-      {
-        role: 'zoomout'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'togglefullscreen'
-      }
-    ]
+	label: 'Edit',
+	submenu: [{
+		role: 'undo'
+	  },
+	  {
+		role: 'redo'
+	  },
+	  {
+		role: 'cut'
+	  },
+	  {
+		role: 'copy'
+	  },
+	  {
+		role: 'paste'
+	  }
+	]
   },
 
   {
-    role: 'window',
-    submenu: [{
-        role: 'minimize'
-      },
-      {
-        role: 'close'
-      }
-    ]
+	label: 'View',
+	submenu: [{
+		role: 'resetzoom'
+	  },
+	  {
+		role: 'zoomin'
+	  },
+	  {
+		role: 'zoomout'
+	  },
+	  {
+		type: 'separator'
+	  },
+	  {
+		role: 'togglefullscreen'
+	  }
+	]
   },
 
   {
-    role: 'help',
-    submenu: [{
-      label: 'Learn More'
-    }]
+	role: 'window',
+	submenu: [{
+		role: 'minimize'
+	  },
+	  {
+		role: 'close'
+	  }
+	]
+  },
+
+  {
+	role: 'help',
+	submenu: [{
+	  label: 'Learn More'
+	}]
   }
 ]
 
@@ -111,12 +111,12 @@ app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+	app.quit()
   }
 })
 
 app.on('activate', () => {
   if (win === null) {
-    createWindow()
+	createWindow()
   }
 })
