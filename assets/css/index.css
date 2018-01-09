@@ -1,0 +1,27 @@
+/*css for tool button on the left toolbar*/
+
+.toolbar-button {
+    margin-top: 4px;
+    margin-bottom: 3px;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    -webkit-app-region: drag;
+}
+
+.toolbar-button:before,
+.toolbar-button:after {
+    display: table;
+    content: " ";
+}
+
+.toolbar-button:after {
+    clear: both;
+}
+
+.toolbar-button>.btn,
+.toolbar-button>.btn-group {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+/*End*/
