@@ -95,6 +95,13 @@ function setNodeBlink(circle) {
 			val.setFill('grey');
 			val.opacity(0.5);
 		});
+		var adj_nodes = adj.get(circle.id);
+		for(var i = 0; i < adj_nodes.length; ++i) {
+			if(adj_nodes[i].start_id != circle.id)
+				map.get(adj_nodes[i].start_id).opacity(1);
+			if(adj_nodes[i].end_id != circle.id)
+				map.get(adj_nodes[i].end_id).opacity(1);
+		}
 		layer.draw();
 	});
 	circle.on('mouseout', function(eve) {
@@ -148,9 +155,7 @@ stage.on('contentClick', function(event) {
 });
 
 stage.on('click', function(event) {
-	console.log(event);
 	switch(selected_tool) {
-
 		//Add edge tool functionality
 		case constants.ADD_EDGE_TOOL:
 			if(!is_selected_start_node) {
@@ -174,6 +179,8 @@ stage.on('click', function(event) {
 				start_node.setFill('black');
 				layer.add(edge);
 				layer.draw();
+				start_node.moveToTop();
+				end_node.moveToTop();
 			}
 	}
 });
