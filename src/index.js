@@ -36,6 +36,7 @@ var stage = new Konva.Stage({
 var normal_tool_btn = document.getElementById("normal_selection");
 var add_node_tool_btn = document.getElementById("add_node");
 var add_edge_tool_btn = document.getElementById("add_edge");
+var drag_tool_btn = document.getElementById("drag");
 
 function setDefaults() {
 	if(is_selected_start_node) {
@@ -71,10 +72,24 @@ add_edge_tool_btn.addEventListener('click', function() {
 	setDefaults();
 });
 
+drag_tool_btn.addEventListener('click', function() {
+	var prev_tool_btn = document.getElementById(selected_tool);
+	prev_tool_btn.classList.remove("active");
+	selected_tool = constants.DRAG_TOOL;
+	drag_tool_btn.classList.add("active");
+	setDefaults();
+});
+
+
+
+
 //It highlights the selected node. 
 //Enhances UX.
 function setNodeBlink(circle) {
 	circle.on('mouseover', function(eve) {
+		if(selected_tool == constants.DRAG_TOOL) {
+			circle.draggable(true);
+		}
 		this.stroke('red');
 		this.strokeWidth(1);
 		adj.forEach(function(edges, key) {
@@ -105,6 +120,7 @@ function setNodeBlink(circle) {
 		layer.draw();
 	});
 	circle.on('mouseout', function(eve) {
+		circle.draggable(false);
 		if(!is_selected_start_node)
 			this.setFill('black');
 		this.stroke(null);
@@ -131,6 +147,24 @@ function setNodeBlink(circle) {
 	});
 }
 
+//Updates the position of edges when node is dragged
+function updateEdgePosition(circle) {
+	circle.on('dragmove', function(event) {
+		var edges = adj.get(circle.id);
+		for(var i = 0; i < edges.length; ++i) {
+			var edge = edges[i];
+			var other_node;
+			if(edge.start_id != circle.id)
+				other_node = map.get(edge.start_id);
+			if(edge.end_id != circle.id)
+				other_node = map.get(edge.end_id);
+			if(other_node)
+				edge.points([circle.x(), circle.y(), other_node.x(), other_node.y()]);
+		}
+		layer.draw();
+	})
+}
+
 stage.on('contentClick', function(event) {
 	switch(selected_tool) {
 
@@ -149,6 +183,7 @@ stage.on('contentClick', function(event) {
 			adj.set(node_id, []);
 			layer.add(circle).draw();
 			setNodeBlink(circle);
+			updateEdgePosition(circle);
 			node_id++;
 			break;
 	}
