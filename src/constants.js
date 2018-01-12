@@ -10,6 +10,13 @@ module.exports = {
 	DEFAULT_NODE_NAME: "",
 	DEFAULT_NODE_SIZE: 4,
 
+	//Default properties of edge
+	DEFAULT_EDGE_TYPE: "undirected_edge",
+	DEFAULT_EDGE_COLOR: "black",
+	DEFAULT_EDGE_SIZE: 0.5,
+	DEFAULT_EDGE_WEIGHT: 0,
+
+
 	//Tools
 	DEFAULT_TOOL: "normal_selection",
 	NORMAL_SELECTION_TOOL: "normal_selection",

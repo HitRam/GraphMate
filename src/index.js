@@ -80,11 +80,13 @@ drag_tool_btn.addEventListener('click', function() {
 	setDefaults();
 });
 
-
-
-
-//It highlights the selected node. 
-//Enhances UX.
+/*
+	Function - setNodeBlink
+		It highlights the selected node. Enhances UX.
+	
+	Params - 
+		circle: Konvajs object (node).
+*/
 function setNodeBlink(circle) {
 	circle.on('mouseover', function(eve) {
 		if(selected_tool == constants.DRAG_TOOL) {
@@ -147,7 +149,14 @@ function setNodeBlink(circle) {
 	});
 }
 
-//Updates the position of edges when node is dragged
+/*
+	Function - updateEdgePosition 
+		Updates the position of edges when node is dragged
+
+	Params - 
+		circle: Konvajs object
+
+*/
 function updateEdgePosition(circle) {
 	circle.on('dragmove', function(event) {
 		var edges = adj.get(circle.id);
@@ -165,26 +174,79 @@ function updateEdgePosition(circle) {
 	})
 }
 
+/* 
+	Function - createNode
+		Creates nodes at specified position.
+
+	Params - 
+		x: x coordinate of node
+		y: y coordinate of node
+		size (optional): size of node. 
+		color (optional): color of node.
+
+*/
+function createNode(x, y, 
+	size = constants.DEFAULT_NODE_SIZE, 
+	color = constants.DEFAULT_NODE_COLOR) {
+
+	var circle = new Konva.Circle({
+		x: x,
+		y: y,
+		radius: size,
+		fill: color
+	});
+
+	circle.id = node_id;
+	map.set(node_id, circle);
+	adj.set(node_id, []);
+	layer.add(circle).draw();
+	setNodeBlink(circle);
+	updateEdgePosition(circle);
+	node_id++;
+}
+
+/*
+	Function - createEdge
+		Creates an edge between node u and node v.
+
+	Params -
+		u: start node
+		v: end node
+		type(optional): Directed / Undirected
+		weight(optional): weight of edge
+		color(optional): color of edge
+		size(optional): stroke width of edge
+
+*/
+function createEdge(u, v, 
+	type = constants.DEFAULT_EDGE_TYPE, 
+	weight = constants.DEFAULT_EDGE_WEIGHT, 
+	color = constants.DEFAULT_EDGE_COLOR,
+	size = constants.DEFAULT_EDGE_SIZE) {
+
+	var edge = new Konva.Line({
+		points: [u.x(), u.y(), v.x(), v.y()],
+		stroke: color,
+		strokeWidth: size,
+	});
+	edge.start_id = u.id;
+	edge.end_id = v.id;
+	adj.get(u.id).push(edge);
+	adj.get(v.id).push(edge);
+	u.setFill('black');
+	layer.add(edge);
+	layer.draw();
+	u.moveToTop();
+	v.moveToTop();
+}
+
 stage.on('contentClick', function(event) {
 	switch(selected_tool) {
 
 		//Add node tool functionality
 		case constants.ADD_NODE_TOOL:
 			var pos = stage.getPointerPosition();
-			var circle = new Konva.Circle({
-				x: pos.x,
-				y: pos.y,
-				radius: constants.DEFAULT_NODE_SIZE,
-				fill: constants.DEFAULT_NODE_COLOR
-			});
-
-			circle.id = node_id;
-			map.set(node_id, circle);
-			adj.set(node_id, []);
-			layer.add(circle).draw();
-			setNodeBlink(circle);
-			updateEdgePosition(circle);
-			node_id++;
+			createNode(pos.x, pos.y);
 			break;
 	}
 });
@@ -202,20 +264,7 @@ stage.on('click', function(event) {
 			else {
 				is_selected_start_node = false;
 				end_node = event.target;
-				var edge = new Konva.Line({
-					points: [start_node.x(), start_node.y(), end_node.x(), end_node.y()],
-					stroke: 'black',
-					strokeWidth: 0.5,
-				});
-				edge.start_id = start_node.id;
-				edge.end_id = end_node.id;
-				adj.get(start_node.id).push(edge);
-				adj.get(end_node.id).push(edge);
-				start_node.setFill('black');
-				layer.add(edge);
-				layer.draw();
-				start_node.moveToTop();
-				end_node.moveToTop();
+				createEdge(start_node, end_node);
 			}
 	}
 });
