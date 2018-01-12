@@ -101,20 +101,23 @@ function setNodeBlink(circle) {
 		}
 		this.stroke('red');
 		this.strokeWidth(1);
+		var degree = 0;
 		adj.forEach(function(edges, key) {
 			if(key == circle.id) 
 				return;
 			for(var i = 0; i < edges.length; ++i) {
-				if(edges[i].start_id == circle.id || edges[i].end_id == circle.id)
+				if(edges[i].start_id == circle.id || edges[i].end_id == circle.id){
+					degree++;
 					continue;
+				}
 				edges[i].opacity(0.3);
 				edges[i].stroke('grey');
 			}
 		});
 		if(circle.name())
-			document.getElementById("node_name").innerHTML = circle.name;
+			document.getElementById("node_name").innerHTML = circle.name + "Degree-" + degree;
 		else
-			document.getElementById("node_name").innerHTML = "Node-" + circle.id;
+			document.getElementById("node_name").innerHTML = "Node-" + circle.id + " Degree-" + degree;
 		map.forEach(function(val, key) {
 			if(key == eve.target.id)
 				return;
