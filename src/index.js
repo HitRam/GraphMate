@@ -7,6 +7,9 @@ var Hashmap = require('hashmap');
 //Unique id for node
 var node_id = 0;
 
+//Number of edges
+var num_edges = 0;
+
 //Hashmap to map node id with canvas object
 var map = new Hashmap();
 
@@ -53,6 +56,7 @@ normal_tool_btn.addEventListener('click', function() {
 	prev_tool_btn.classList.remove("active");
 	selected_tool = constants.DEFAULT_TOOL;
 	normal_tool_btn.classList.add("active");
+	document.getElementById("tool_name").innerHTML = "Selection";
 	setDefaults();
 });
 
@@ -61,6 +65,7 @@ add_node_tool_btn.addEventListener('click', function() {
 	prev_tool_btn.classList.remove("active");
 	selected_tool = constants.ADD_NODE_TOOL;
 	add_node_tool_btn.classList.add("active");
+	document.getElementById("tool_name").innerHTML = "Add Node";
 	setDefaults();
 });
 
@@ -69,6 +74,7 @@ add_edge_tool_btn.addEventListener('click', function() {
 	prev_tool_btn.classList.remove("active");
 	selected_tool = constants.ADD_EDGE_TOOL;
 	add_edge_tool_btn.classList.add("active");
+	document.getElementById("tool_name").innerHTML = "Add Edge";
 	setDefaults();
 });
 
@@ -77,6 +83,7 @@ drag_tool_btn.addEventListener('click', function() {
 	prev_tool_btn.classList.remove("active");
 	selected_tool = constants.DRAG_TOOL;
 	drag_tool_btn.classList.add("active");
+	document.getElementById("tool_name").innerHTML = "Drag";
 	setDefaults();
 });
 
@@ -104,6 +111,10 @@ function setNodeBlink(circle) {
 				edges[i].stroke('grey');
 			}
 		});
+		if(circle.name())
+			document.getElementById("node_name").innerHTML = circle.name;
+		else
+			document.getElementById("node_name").innerHTML = "Node-" + circle.id;
 		map.forEach(function(val, key) {
 			if(key == eve.target.id)
 				return;
@@ -122,6 +133,7 @@ function setNodeBlink(circle) {
 		layer.draw();
 	});
 	circle.on('mouseout', function(eve) {
+		document.getElementById("node_name").innerHTML = "infobar"
 		circle.draggable(false);
 		if(!is_selected_start_node)
 			this.setFill('black');
@@ -203,6 +215,8 @@ function createNode(x, y,
 	setNodeBlink(circle);
 	updateEdgePosition(circle);
 	node_id++;
+
+	document.getElementById("node_count").innerHTML = "Nodes " + String(adj.size) + ",";
 }
 
 /*
@@ -224,11 +238,37 @@ function createEdge(u, v,
 	color = constants.DEFAULT_EDGE_COLOR,
 	size = constants.DEFAULT_EDGE_SIZE) {
 
-	var edge = new Konva.Line({
-		points: [u.x(), u.y(), v.x(), v.y()],
-		stroke: color,
-		strokeWidth: size,
-	});
+	var edge_count = 0;
+	var edges = adj.get(u.id);
+	for(var i = 0; i < edges.length; ++i)
+		if(edges[i].start_id == v.id || edges[i].end_id == v.id)
+			edge_count++;
+	var edge;
+	if(edge_count > 0) {
+		return;
+		// var dx = (u.x() + v.x()) / 2.0 + 30.0;
+		// var dy = (u.y() + v.y()) / 2.0;
+		// edge = new Konva.Shape({
+		// 	sceneFunc: function(context) {
+		// 		context.beginPath();
+		// 		context.moveTo(u.x(), u.y());
+		// 		context.quadraticCurveTo(dx, dy, v.x(), v.y());
+		// 		context.fillStrokeShape(this);
+		// 	},
+		// 	stroke: color,
+		// 	strokeWidth: size,
+		// 	type: 'cuved'
+		// })
+	}
+	else {
+		num_edges++;
+		edge = new Konva.Line({
+			points: [u.x(), u.y(), v.x(), v.y()],
+			stroke: color,
+			strokeWidth: size,
+			type: 'straight'
+		});
+	}
 	edge.start_id = u.id;
 	edge.end_id = v.id;
 	adj.get(u.id).push(edge);
@@ -238,6 +278,8 @@ function createEdge(u, v,
 	layer.draw();
 	u.moveToTop();
 	v.moveToTop();
+	document.getElementById("edge_count").innerHTML = "Edges " + String(num_edges);
+
 }
 
 stage.on('contentClick', function(event) {
