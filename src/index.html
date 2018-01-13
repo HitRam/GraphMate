@@ -1,4 +1,5 @@
-`<!DOCTYPE html>
+`
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,10 +11,11 @@
 
 <body>
     <div class="window">
-<!--         <header class="toolbar toolbar-header">
+        <!--         <header class="toolbar toolbar-header">
             <h1 class="title">GraphMate</h1>
         </header>
- -->        <div class="tab-group">
+ -->
+        <div class="tab-group">
             <div class="tab-item active">
                 <span class="icon icon-cancel icon-close-tab"></span> untitled*
             </div>
@@ -48,9 +50,38 @@
                             </button>
                         </div>
                     </div>
-                    <center><h7 class="nav-group-title" id="tool_name">Selection</h7></center>
+                    <center>
+                        <h7 class="nav-group-title" id="tool_name">Selection</h7>
+                    </center>
                 </div>
                 <div class="pane" id="workspace1"></div>
+                <div class="details_sidebar dismiss pane-mini sidebar">
+                    <br>
+                    <div class="form-group">
+                        Name
+                        <input type="text" class="form-control" placeholder="Name" id="node_name">
+                    </div>
+                    <div class="form-group">
+                        Id
+                        <input type="number" class="form-control" placeholder="id" id="node_id" readonly>
+                    </div>
+                    <div class="form-group">
+                        Postion (x):
+                        <input type="number" class="form-control" placeholder="Postion (x)" id="node_posx">
+                    </div>
+                    <div class="form-group">
+                        Postion (y):
+                        <input type="number" class="form-control" placeholder="Postion (x)" id="node_posy">
+                    </div>
+                    <div class="form-group">
+                        Color
+                        <input type="text" class="form-control" placeholder="black" id="node_color">
+                    </div>
+                    <div class="form-group">
+                        Size
+                        <input type="number" class="form-control" placeholder="4" id="node_size">
+                    </div>
+                </div>
             </div>
         </div>
         <footer class="toolbar toolbar-footer" id="infobar1">
