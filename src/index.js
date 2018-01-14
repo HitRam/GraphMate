@@ -120,9 +120,10 @@ function setNodeBlink(circle) {
             }
         });
         if (circle.name())
-            document.getElementById("node_name").innerHTML = circle.name + "Degree-" + degree;
+            document.getElementById("node_name_infobar").innerHTML = circle.name;
         else
-            document.getElementById("node_name").innerHTML = "Node-" + circle.id + " Degree-" + degree;
+            document.getElementById("node_name_infobar").innerHTML = "Node-" + circle.id;
+        document.getElementById("degree_count").innerHTML = "Degree " + degree;
         map.forEach(function(val, key) {
             if (key == eve.target.id)
                 return;
@@ -141,7 +142,8 @@ function setNodeBlink(circle) {
         layer.draw();
     });
     circle.on('mouseout', function(eve) {
-        document.getElementById("node_name").innerHTML = "infobar"
+        document.getElementById("node_name").innerHTML = "infobar";
+        document.getElementById("degree_count").innerHTML = "Degree -" ;
         circle.draggable(false);
         if (!is_selected_start_node)
             this.setFill('black');
