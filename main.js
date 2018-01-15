@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const url = require('url')
+const ipc = require('electron').ipcMain
 
 //global reference to window object
 let win
@@ -120,3 +121,10 @@ app.on('activate', () => {
 	createWindow()
   }
 })
+
+ipc.on('draw-graph-main', function(event, arg) {
+	win.webContents.send('draw-graph-index', arg);
+})
+
+
+

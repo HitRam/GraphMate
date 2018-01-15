@@ -1,10 +1,15 @@
 const { remote } = require('electron')
 const { Menu, MenuItem } = remote
+const electron = require('electron')
+const path = require('path')
+const ipc = electron.ipcRenderer
+const BrowserWindow = electron.remote.BrowserWindow
 window.$ = window.jQuery = require('jquery');
 
 
 var constants = require('./constants');
 var Hashmap = require('hashmap');
+var random = require('random-js')();
 
 //Unique id for node
 var node_id = 0;
@@ -32,8 +37,8 @@ var details_bar = 0;
 
 //Basic set up for Konva
 var layer = new Konva.Layer();
-var width = window.innerWidth;
-var height = window.innerHeight;
+var width = document.getElementById("workspace1").clientWidth;
+var height = document.getElementById("workspace1").clientHeight;
 var stage = new Konva.Stage({
     container: 'workspace1',
     width: width,
@@ -45,6 +50,9 @@ var normal_tool_btn = document.getElementById("normal_selection");
 var add_node_tool_btn = document.getElementById("add_node");
 var add_edge_tool_btn = document.getElementById("add_edge");
 var drag_tool_btn = document.getElementById("drag");
+
+//Generator buttons
+var random_graph_btn = document.getElementById("random_graph");
 
 function setDefaults() {
     if (is_selected_start_node) {
@@ -91,6 +99,23 @@ drag_tool_btn.addEventListener('click', function() {
     document.getElementById("tool_name").innerHTML = "Drag";
     setDefaults();
 });
+
+random_graph_btn.addEventListener('click', function() {
+    random_graph_btn.classList.add("active");
+    let win = new BrowserWindow({ alwaysOnTop: true, 
+            width: 400, 
+            height: 200});
+    const loadpath = path.join('file://', __dirname, 'choose_graph.html');
+    win.loadURL(loadpath);
+    win.on('close', function() {
+        win = null;
+        random_graph_btn.classList.remove("active");
+    })
+    win.webContents.openDevTools()
+    win.show()
+});
+
+
 
 /*
 	Function - setNodeBlink
@@ -142,7 +167,7 @@ function setNodeBlink(circle) {
         layer.draw();
     });
     circle.on('mouseout', function(eve) {
-        document.getElementById("node_name").innerHTML = "infobar";
+        document.getElementById("node_name_infobar").innerHTML = "infobar";
         document.getElementById("degree_count").innerHTML = "Degree -" ;
         circle.draggable(false);
         if (!is_selected_start_node)
@@ -304,6 +329,45 @@ function createEdge(u, v,
 
 }
 
+/*
+    Function - drawRandomGraph
+        Draws a random graph with default parameters
+
+    Params - 
+        n: number of nodes
+        m: number of edges
+*/
+function drawRandomGraph(n, m) {
+    map.clear();
+    adj.clear();
+    for(var i = 0; i < parseInt(n); ++i) {
+        var x = random.real(1.0, width);
+        var y = random.real(1.0, height);
+        createNode(x, y);
+    }
+    var curr = 0;
+    while(curr != parseInt(m)) {
+        var u = random.integer(0, n - 1);
+        var v = random.integer(0, n - 1);
+        console.log(u);
+        if(u == v)
+            continue;
+        var edges = adj.get(u);
+        console.log(edges.length);
+        var flag = true;
+        for(var i = 0; i < edges.length; ++i) {
+            if(edges[i].start_id == v || edges[i].end_id == v) {
+                flag = false;
+                break;
+            }
+        }
+        if(!flag)
+            continue;
+        createEdge(map.get(u), map.get(v));
+        curr++;
+    }
+}
+
 stage.on('contentClick', function(event) {
     if (details_bar == 0) {
         if ($('.details_sidebar').hasClass('selected')) {
@@ -372,3 +436,10 @@ window.addEventListener('contextmenu', (e) => {
 }, false)
 
 //End Menu Bar
+
+ipc.on('draw-graph-index', function(event, arg) {
+    drawRandomGraph(arg.num_nodes, arg.num_edges);
+})
+
+
+
