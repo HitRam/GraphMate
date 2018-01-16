@@ -8,6 +8,7 @@ var ok_btn = document.getElementById("ok_btn");
 
 close_btn.addEventListener('click', function() {
 	var win = remote.getCurrentWindow();
+	ipc.send("close-subwindow");
 	win.close();
 });
 

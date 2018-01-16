@@ -126,5 +126,6 @@ ipc.on('draw-graph-main', function(event, arg) {
 	win.webContents.send('draw-graph-index', arg);
 })
 
-
-
+ipc.on('close-subwindow', function(event, arg) {
+	win.webContents.send('close-subwindow');
+})

@@ -104,14 +104,17 @@ random_graph_btn.addEventListener('click', function() {
     random_graph_btn.classList.add("active");
     let win = new BrowserWindow({ alwaysOnTop: true, 
             width: 400, 
-            height: 200});
+            height: 150,
+            frame: false});
     const loadpath = path.join('file://', __dirname, 'choose_graph.html');
     win.loadURL(loadpath);
     win.on('close', function() {
         win = null;
         random_graph_btn.classList.remove("active");
     })
-    win.webContents.openDevTools()
+    $("body").css("pointer-events", "none");
+    win.setAlwaysOnTop(true);
+    // win.webContents.openDevTools()
     win.show()
 });
 
@@ -438,8 +441,12 @@ window.addEventListener('contextmenu', (e) => {
 //End Menu Bar
 
 ipc.on('draw-graph-index', function(event, arg) {
+    $("body").css("pointer-events", "");
     drawRandomGraph(arg.num_nodes, arg.num_edges);
 })
 
+ipc.on('close-subwindow', function(event, arg) {
+    $("body").css("pointer-events", "");
+})
 
 
