@@ -31,6 +31,7 @@ var selected_tool = constants.DEFAULT_TOOL;
 var is_selected_start_node = false;
 var start_node;
 var end_node;
+var selected_node;
 
 //To check node click for details-bar in contentClick
 var details_bar = 0;
@@ -148,7 +149,7 @@ function setNodeBlink(circle) {
             }
         });
         if (circle.name())
-            document.getElementById("node_name_infobar").innerHTML = circle.name;
+            document.getElementById("node_name_infobar").innerHTML = circle.name();
         else
             document.getElementById("node_name_infobar").innerHTML = "Node-" + circle.id;
         document.getElementById("degree_count").innerHTML = "Degree " + degree;
@@ -202,12 +203,15 @@ function setNodeBlink(circle) {
             $('.details_sidebar').removeClass('dismiss').addClass('selected').show();
             if (circle.name())
                 $('#node_name').val(circle.name());
+            else
+                $('#node_name').val('');
             $('#node_id').val(circle.id);
             $('#node_posx').val(circle.x());
             $('#node_posy').val(circle.y());
             $('#node_color').val(circle.fill());
             $('#node_size').val(circle.radius());
             details_bar = 1;
+            selected_node = circle;
         }
     });
 }
@@ -411,6 +415,26 @@ stage.on('click', function(event) {
 stage.add(layer);
 
 // stage.add(layer);
+
+/*
+    Function - updateNode
+		Updates node values from the sidebar
+*/
+
+function updateNode(){
+	var node_id = $("#node_id").val()
+	var node_name = $("#node_name").val()
+	var node_posx = $("#node_posx").val()
+	var node_posy = $("#node_posy").val()
+	var node_color = $("#node_color").val()
+	var node_size = $("#node_size").val()
+	selected_node.x(node_posx);
+	selected_node.y(node_posy);
+	selected_node.radius(node_size);
+	selected_node.name(node_name);
+	selected_node.fill(node_color);
+	layer.draw();
+}
 
 //Menu Bar at top
 const menu = new Menu()
